@@ -54,8 +54,8 @@ lv_obj_t * ui_ArrowRightLabel4;
 ///////////////////////////////////////////////////
 
 ///////////////////// WIRELESS ////////////////////
-const char* ssid = "ASUS_W45H"; // Your SSID Here
-const char* password = "pEd4UD8tLrpC"; // Your Password Here 
+const char* ssid = "SSID"; // Your SSID Here
+const char* password = "PASSWORD"; // Your Password Here 
 
 const char* ntpServer = "pool.ntp.org"; // This Time Server Should Work Fine!
 const long  gmtOffset_sec = 0; // Change to your local time zone offset
