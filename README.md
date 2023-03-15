@@ -8,3 +8,11 @@ To compile you will need [PlatformIO Core (CLI)](https://docs.platformio.org/en/
 2. Path into the root of the installed directory
 3. With your ESP32 plugged in (USB or UART) and in flash mode, run `pio run --target upload --environment WT_86_32_3ZW1`
 4. Restart your chip.
+
+## Functionality
+Currently, this is more of a proof of concept, however it will become fully functional as progression occurs. The only functional piece of UI is the reboot button, WiFi Features and One Output, which is labelled as "Main Light" and operates pin 6, which is GPIO41 on the WT-86-32-3ZW1, which links the the backbox relay. This is all customizable if you compile the source yourself.
+
+## Screenshots
+![image](https://user-images.githubusercontent.com/33783071/225415165-20ed01f3-18ef-40f7-a462-c514cadb3698.png)
+![image](https://user-images.githubusercontent.com/33783071/225415203-59e2b0fc-9349-472d-abb1-9f6ab34873d7.png)
+![image](https://user-images.githubusercontent.com/33783071/225415247-6dccb85b-6361-44a7-babc-619f1f6afea1.png)
