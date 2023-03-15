@@ -1,12 +1,10 @@
-#include <lvgl.h>
-#include <LGFX.hpp>
-#include <display_driver.h>
-#include <WiFi.h>
+// SquareLine LVGL GENERATED FILE
+// EDITOR VERSION: SquareLine Studio 1.2.0
+// LVGL VERSION: 8.3.4
+// PROJECT: Control32X
+
 #include "ui.h"
 #include "ui_helpers.h"
-#include "time.h"
-#include <Arduino.h>
-#include <Esp.h>
 
 ///////////////////// VARIABLES ////////////////////
 lv_obj_t * ui_LoadingScreen;
@@ -55,7 +53,7 @@ void ui_event_ArrowLeft4(lv_event_t * e);
 lv_obj_t * ui_ArrowLeft4;
 lv_obj_t * ui_ArrowLeftLabel4;
 lv_obj_t * ui_ArrowRightLabel4;
-void ui_event_LocalRestart(lv_event_t * e);
+void ui_event_Restart(lv_event_t * e);
 lv_obj_t * ui_Restart;
 lv_obj_t * ui_RestartLabel;
 lv_obj_t * ui_WirelessSSID;
@@ -85,16 +83,16 @@ lv_obj_t * ui_Keyboard3;
 void ui_event_WifiConnect(lv_event_t * e);
 lv_obj_t * ui_WifiConnect;
 lv_obj_t * ui_WifiConnectLabel;
-///////////////////////////////////////////////////
 
-///////////////////// WIRELESS ////////////////////
-//const char* ssid = "NO LONGER USED"; // Your SSID Here
-//const char* password = "NO LONGER USED"; // Your Password Here 
+///////////////////// TEST LVGL SETTINGS ////////////////////
+#if LV_COLOR_DEPTH != 16
+    #error "LV_COLOR_DEPTH should be 16bit to match SquareLine Studio's settings"
+#endif
+#if LV_COLOR_16_SWAP !=0
+    #error "LV_COLOR_16_SWAP should be 0 to match SquareLine Studio's settings"
+#endif
 
-const char* ntpServer = "pool.ntp.org"; // This Time Server Should Work Fine!
-const long  gmtOffset_sec = 0; // Change to your local time zone offset
-const int   daylightOffset_sec = 3600; // Change to your daylight offset
-///////////////////////////////////////////////////
+///////////////////// ANIMATIONS ////////////////////
 
 ///////////////////// FUNCTIONS ////////////////////
 void ui_event_ArrowRight1(lv_event_t * e)
@@ -113,13 +111,15 @@ void ui_event_ArrowLeft1(lv_event_t * e)
         _ui_screen_change(ui_Settings, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0);
     }
 }
-void ui_event_Light1(lv_event_t * e)
+void ui_event_Switch2(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
     lv_obj_t * target = lv_event_get_target(e);
-    if(event_code == LV_EVENT_PRESSED) {
-
-        (e);
+    if(event_code == LV_EVENT_VALUE_CHANGED &&  lv_obj_has_state(target, LV_STATE_CHECKED)) {
+        LightOnIO(e);
+    }
+    if(event_code == LV_EVENT_VALUE_CHANGED &&  !lv_obj_has_state(target, LV_STATE_CHECKED)) {
+        LightOffIO(e);
     }
 }
 void ui_event_ArrowRight2(lv_event_t * e)
@@ -170,6 +170,14 @@ void ui_event_ArrowLeft4(lv_event_t * e)
         _ui_screen_change(ui_PanelThree, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0);
     }
 }
+void ui_event_Restart(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+    lv_obj_t * target = lv_event_get_target(e);
+    if(event_code == LV_EVENT_CLICKED) {
+        LocalRestart(e);
+    }
+}
 void ui_event_ArrowRight5(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
@@ -212,46 +220,7 @@ void ui_event_WifiConnect(lv_event_t * e)
     }
 }
 
-void SaveSSID(lv_event_t * e)
-{
-
-}
-
-void ConnectToWireless(lv_event_t * e)
-{
-    const char* ssid = lv_textarea_get_text(ui_NetworkSSID);
-    const char* password = lv_textarea_get_text(ui_NetworkPSWD);
-	WiFi.mode(WIFI_STA); //Optional
-    WiFi.begin(ssid, password);
-}
-
-void ui_event_LocalRestart(lv_event_t * e)
-{
-    lv_event_code_t event_code = lv_event_get_code(e);
-    lv_obj_t * target = lv_event_get_target(e);
-    if(event_code == LV_EVENT_CLICKED) {
-        ESP.restart();
-    }
-}
-void ui_event_Switch2(lv_event_t * e)
-{
-    lv_event_code_t event_code = lv_event_get_code(e);
-    lv_obj_t * target = lv_event_get_target(e);
-    if(event_code == LV_EVENT_VALUE_CHANGED &&  lv_obj_has_state(target, LV_STATE_CHECKED)) {
-        digitalWrite(6, HIGH);
-    }
-    if(event_code == LV_EVENT_VALUE_CHANGED &&  !lv_obj_has_state(target, LV_STATE_CHECKED)) {
-        digitalWrite(6, LOW);
-    }
-}
-
-///////////////////////////////////////////////////
-
-LGFX lcd;
-
-static lv_disp_draw_buf_t draw_buf;
-static lv_color_t *buf = (lv_color_t *)heap_caps_malloc(TFT_WIDTH * 20 * sizeof(lv_color_t), MALLOC_CAP_DMA);
-
+///////////////////// SCREENS ////////////////////
 void ui_LoadingScreen_screen_init(void)
 {
     ui_LoadingScreen = lv_obj_create(NULL);
@@ -640,7 +609,7 @@ void ui_Settings_screen_init(void)
 
     lv_obj_add_event_cb(ui_ArrowRight4, ui_event_ArrowRight4, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_ArrowLeft4, ui_event_ArrowLeft4, LV_EVENT_ALL, NULL);
-    lv_obj_add_event_cb(ui_Restart, ui_event_LocalRestart, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_Restart, ui_event_Restart, LV_EVENT_ALL, NULL);
 
 }
 void ui_WirelessSSID_screen_init(void)
@@ -865,41 +834,8 @@ void ui_WirelessPSWD_screen_init(void)
 
 }
 
-
-
-void setup()
+void ui_init(void)
 {
-    Serial.begin(115200);
-    Serial.printf("Version: %d.%d.%d\n", lv_version_major(), lv_version_minor(), lv_version_patch());
-
-    lv_init();
-    lv_theme_default_init(NULL, lv_color_hex(0xFFEB3B), lv_color_hex(0xFF7043), 1, LV_FONT_DEFAULT);
-
-#if LV_USE_LOG != 0
-    lv_log_register_print_cb(my_print); /* register print function for debugging */
-#endif
-
-    lcd.init();
-
-    uint16_t data[8]{1020, 44, 1020, 645, 5, 44, 3, 647};
-    lcd.setTouchCalibrate(data);
-
-    lv_disp_draw_buf_init(&draw_buf, buf, NULL, TFT_WIDTH * 20);
-
-    static lv_disp_drv_t disp_drv;
-    lv_disp_drv_init(&disp_drv);
-    disp_drv.hor_res = TFT_WIDTH;
-    disp_drv.ver_res = TFT_HEIGHT;
-    disp_drv.flush_cb = flush_pixels;
-    disp_drv.draw_buf = &draw_buf;
-    lv_disp_drv_register(&disp_drv);
-
-    static lv_indev_drv_t indev_drv;
-    lv_indev_drv_init(&indev_drv);
-    indev_drv.type = LV_INDEV_TYPE_POINTER;
-    indev_drv.read_cb = touchpad_read;
-    lv_indev_drv_register(&indev_drv);
-
     lv_disp_t * dispp = lv_disp_get_default();
     lv_theme_t * theme = lv_theme_default_init(dispp, lv_palette_main(LV_PALETTE_BLUE), lv_palette_main(LV_PALETTE_RED),
                                                true, LV_FONT_DEFAULT);
@@ -912,25 +848,4 @@ void setup()
     ui_WirelessSSID_screen_init();
     ui_WirelessPSWD_screen_init();
     lv_disp_load_scr(ui_LoadingScreen);
-    pinMode(6, OUTPUT);
-    delay(5000);
-    _ui_screen_change(ui_MainPanelOne, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0);
-}
-
-unsigned long timer1;
-void loop()
-{
-    lv_label_set_text(ui_IPAddressText, WiFi.localIP().toString().c_str());
-    lv_timer_handler();
-
-    if (millis() - timer1 > 2000)
-    {
-        timer1 = millis();
-        // lv_roller_set_selected(roller1, random(0, 6), LV_ANIM_ON);
-    }
-}
-
-void _ui_screen_change(lv_obj_t * target, lv_scr_load_anim_t fademode, int spd, int delay)
-{
-    lv_scr_load_anim(target, fademode, spd, delay, false);
 }

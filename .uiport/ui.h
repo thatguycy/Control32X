@@ -25,9 +25,9 @@ void ui_event_ArrowLeft1(lv_event_t * e);
 extern lv_obj_t * ui_ArrowLeft1;
 extern lv_obj_t * ui_ArrowLeftLabel1;
 extern lv_obj_t * ui_ArrowRightLabel1;
-void ui_event_Light1(lv_event_t * e);
-extern lv_obj_t * ui_Light1;
 extern lv_obj_t * ui_LightLabel1;
+void ui_event_Switch2(lv_event_t * e);
+extern lv_obj_t * ui_Switch2;
 extern lv_obj_t * ui_PanelTwo;
 extern lv_obj_t * ui_TopBar1;
 extern lv_obj_t * ui_TBT2;
@@ -89,7 +89,9 @@ void ui_event_WifiConnect(lv_event_t * e);
 extern lv_obj_t * ui_WifiConnect;
 extern lv_obj_t * ui_WifiConnectLabel;
 
-void RebootC32X(lv_event_t * e);
+void LightOnIO(lv_event_t * e);
+void LightOffIO(lv_event_t * e);
+void LocalRestart(lv_event_t * e);
 void SaveSSID(lv_event_t * e);
 void ConnectToWireless(lv_event_t * e);
 
